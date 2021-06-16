@@ -1,0 +1,342 @@
+﻿@page
+@using MongoDB.Driver;
+@using Microsoft.AspNetCore.Html;
+@model LeaderboardModel
+@{
+    Layout = "Shared/MainLayout.cshtml";
+    string catName = Request.Query["cat"];
+    ViewData["Title"] = catName;
+}
+
+@section LeftNavigation {
+    <ul class="nav flex-column">
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedPP">Weighted PP</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=rawPP">Raw PP</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageScorePercentage">Weighted average score %</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageScorePercentage">Average score %</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageRank">Weighted average rank</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageRank">Average rank</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageCountryRank">Weighted Average country rank</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageCountryRank">Average country rank</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=topPP">Top PP play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest96">Highest 96+% play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest97">Highest 97+% play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest98">Highest 98+% play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest99">Highest 99+% play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfRankedDiffPlayed">Number of ranked diff. played</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOf95">Number of ranked play with 95+%</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=bestRank">Best rank of any ranked play</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOf325">Number of ranked play worth 325+pp</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfCountryFirst">Number of #1st place in country</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfFirst">Number of #1st place</a>
+        </li>
+        <li class="leftnav-button">
+            <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfTop10">Number of top 10</a>
+        </li>
+    </ul>
+}
+
+<div class="text-center">
+    @{
+        Leaderboard leaderboard = DataManager.GetT<Leaderboard>("leaderboards", Builders<Leaderboard>.Filter.Eq("category", catName)).First();
+        Snapshot snapshot = DataManager.GetT<Snapshot>("snapshots", Builders<Snapshot>.Filter.Eq("category", catName)).First();   // First is always oldest
+        List<Profile> profiles = DataManager.GetT<Profile>("profiles", null);
+        Dictionary<string, int> snapshotPlacement = new Dictionary<string, int>();
+        int place = 0;
+        Profile tmp;
+        DataStatic catData = DataManager.staticData[catName];
+        List<string> countries = profiles.Select(p => p.country).Distinct().ToList();
+
+        for (int i = 0; i < snapshot.entries.Keys.Count; i++)
+            snapshotPlacement.Add(snapshot.entries.Keys.ElementAt(i), i + 1);
+
+        <h1>@catData.name</h1>
+
+        if (catData.name == "Weighted PP")
+        {
+            <h6>Sum of PP, weighted by the top PP score. This is the same leaderboard as ScoreSaber.</h6>
+        }
+        else if (catData.name == "Raw PP")
+        {
+            <h6>Sum of PP, not weighted. That means that all your maps will always be worth the number of PP shown on the leaderboard.</h6>
+        }
+        else if (catData.name == "Weighted average score percentage")
+        {
+<h6>Score percentage (also wrongly called "accuracy"), weighted by the top PP score.</h6>
+        }
+        else if (catData.name == "Average score percentage")
+        {
+<h6>Score percentage (also wrongly called "accuracy"), not weighted.</h6>
+        }
+        else if (catData.name == "Weighted average rank")
+        {
+<h6>Average rank, weighted by the top PP score.</h6>
+        }
+        else if (catData.name == "Average rank")
+        {
+<h6>Average rank, not weighted.</h6>
+        }
+        else if (catData.name == "Weighted average country rank")
+        {
+<h6>Average rank in respective country, weighted by the top PP score.</h6>
+        }
+        else if (catData.name == "Average country rank")
+        {
+<h6>Average rank in respective country, not weighted.</h6>
+        }
+        else if (catData.name == "Top PP")
+        {
+<h6>Highest PP play.</h6>
+        }
+        else if (catData.name == "Highest 96+%")
+        {
+<h6>Highest PP play with a score of 96% or more.</h6>
+        }
+        else if (catData.name == "Highest 97+%")
+        {
+<h6>Highest PP play with a score of 97% or more.</h6>
+        }
+        else if (catData.name == "Highest 98+%")
+        {
+<h6>Highest PP play with a score of 98% or more.</h6>
+        }
+        else if (catData.name == "Highest 99+%")
+        {
+<h6>Highest PP play with a score of 99% or more.</h6>
+        }
+        else if (catData.name == "Number of ranked difficulty played")
+        {
+<h6>Number of ranked difficulty played.</h6>
+        }
+        else if (catData.name == "Number of 95+%")
+        {
+<h6>Number of ranked difficulty played with a score of 95% or more.</h6>
+        }
+        else if (catData.name == "Best rank on any ranked difficulty")
+        {
+<h6>Highest world rank achieved on any ranked difficulty.</h6>
+        }
+        else if (catData.name == "Number of 325+pp plays")
+        {
+<h6>Number of ranked difficulty played with a PP value of 325 or more.</h6>
+        }
+        else if (catData.name == "Number of country #1 place")
+        {
+<h6>Number of first place on ranked difficulties in respective country.</h6>
+        }
+        else if (catData.name == "Number of #1 place")
+        {
+<h6>Number of world first place on ranked difficulties.</h6>
+        }
+        else if (catData.name == "Number of top 10")
+        {
+        <h6>Number of world top 10 or more on ranked difficulties.</h6>
+        }
+
+<input type="text" id="nameFilter" placeholder="Enter player name..." />
+
+<fieldset>
+    <select style="text-align:right;" name="people" id="countryFilter" onchange="filterTable()">
+        <option value="global">Global</option>
+        @for (int i = 0; i < countries.Count; i++)
+        {
+            <option value="@countries[i].ToLower()" data-class="avatar" data-style="background-image: url(@("\"https://scoresaber.com/imports/images/flags/" + countries[i].ToLower() + ".png\""));">@countries[i]</option>
+        }
+    </select>
+</fieldset>
+
+<table id="filteredTable">
+    <thead>
+        <tr style="height:50px;">
+            <th>
+            </th>
+            <th>
+                Rank
+            </th>
+            <th style="text-align:left;padding-left:20px;">
+                Player name
+            </th>
+            <th>
+                Value
+            </th>
+            <th>
+                Weekly Change
+            </th>
+    </thead>
+
+
+    @foreach (KeyValuePair<string, double> kvp in leaderboard.entries)
+    {
+        tmp = profiles.Find(p => p.SSID == kvp.Key);
+
+        <tr style="height:35px;">
+            <td>
+                <img style="border-radius: 50%; width:24px; height:24px;" src="@("https://new.scoresaber.com" + tmp.avatarPath)" />
+            </td>
+            <td>
+                #@(++place)
+            </td>
+            <td class="playerName" style="text-align:left;padding-left:20px;">
+                <img class="countryFlag" style="width:16px; height:11px;" data-flag="@(tmp.country.ToLower())" src="@("https://scoresaber.com/imports/images/flags/" + tmp.country.ToLower() + ".png")" /> @tmp.nickname
+            </td>
+            <td>
+                @{
+                    string tmpStr = Utils.FormatString(kvp.Value, catData.formatting) + catData.symbol;
+                    double diff;
+
+                    if (snapshot.entries.ContainsKey(kvp.Key))
+                    {
+                        diff = kvp.Value - snapshot.entries[kvp.Key];
+                        if (diff > 0.01)
+                            tmpStr += " <span style=\"color:green;\">+";
+                        else if (diff < -0.01)
+                            tmpStr += " <span style=\"color:red;\">";
+
+                        if (diff > 0.01 || diff < -0.01)
+                            tmpStr += Utils.FormatString(diff, catData.formatting) + catData.symbol + "</span>";
+                    }
+                }
+                @(new HtmlString(tmpStr))
+            </td>
+            <td>
+                @{
+                    if (snapshotPlacement.ContainsKey(kvp.Key))
+                    {
+                        diff = snapshotPlacement[kvp.Key] - place;
+                        if (diff > 0)
+                            tmpStr = "<span style=\"color:green;\">+";
+                        else if (diff < 0)
+                            tmpStr = "<span style=\"color:red;\">";
+
+                        if (diff != 0)
+                            tmpStr += diff + "</span>";
+                        else
+                            tmpStr = "0";
+                    }
+                    else
+                    {
+                        tmpStr = "New";
+                    }
+                }
+                @(new HtmlString(tmpStr))
+            </td>
+        </tr>
+
+    }
+
+</table>
+    }
+</div>
+
+@section Scripts {    
+    <script>
+        $(function () {
+            $.widget("custom.iconselectmenu", $.ui.selectmenu, {
+                _renderItem: function (ul, item) {
+                    var li = $("<li>"),
+                        wrapper = $("<div>", { text: item.label });
+
+                    if (item.disabled) {
+                        li.addClass("ui-state-disabled");
+                    }
+
+                    $("<span>", {
+                        style: item.element.attr("data-style"),
+                        "class": "ui-icon " + item.element.attr("data-class")
+                    })
+                        .appendTo(wrapper);
+
+                    return li.append(wrapper).appendTo(ul);
+                }
+            });
+
+            $("#filesA")
+                .iconselectmenu()
+                .iconselectmenu("menuWidget")
+                .addClass("ui-menu-icons");
+
+            $("#filesB")
+                .iconselectmenu()
+                .iconselectmenu("menuWidget")
+                .addClass("ui-menu-icons customicons");
+
+            $("#countryFilter")
+                .iconselectmenu()
+                .iconselectmenu("menuWidget")
+                .addClass("ui-menu-icons avatar");
+        });
+    </script>
+    <script>
+        $(document).on("keyup", "#nameFilter", () => {
+            for (let tr of $("#filteredTable tbody").find("tr")) {
+                $(tr).css("display", "none")                
+
+                if ($(tr).find(".playerName").first().html().toLowerCase().includes($("#nameFilter").val().toLowerCase())) {
+                    if ($("#countryFilter").val().toLowerCase() !== "global" && $(tr).find(".countryFlag").first().data("flag").toLowerCase() === $("#countryFilter").val().toLowerCase()) {
+                        $(tr).css("display", "table-row")
+                    } else if ($("#countryFilter").val().toLowerCase() === "global") {
+                        $(tr).css("display", "table-row")
+                    }
+                }
+                    
+            }            
+        })
+
+        $(document).on("click", "#countryFilter-menu .ui-menu-item", () => {
+            let selectedValue = $("#countryFilter").val()            
+
+            for (let tr of $("#filteredTable tbody").find("tr")) {
+                $(tr).css("display", "none")                
+
+                if (
+                    $(tr).find(".countryFlag").first().data("flag").toLowerCase() === selectedValue.toLowerCase()
+                    || selectedValue.toLowerCase() === "global"
+                ) {
+                    if ($("#nameFilter").val() !== "" && $(tr).find(".playerName").first().html().toLowerCase().includes($("#nameFilter").val().toLowerCase())) {
+                        $(tr).css("display", "table-row")
+                    } else if ($("#nameFilter").val() === "") {
+                        $(tr).css("display", "table-row")
+                    }
+                }
+                    
+            }
+        })
+    </script>
+}

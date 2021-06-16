@@ -1,0 +1,165 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 15px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    color: #fff;
+    /*background-color: #1d2520;*/
+    background-color: #37474f;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+/* Hello
+-------------------------------------------------- */
+
+table {
+    width: 100%;
+}
+
+table thead tr th {
+    border: 2px solid #dbdbdb;
+    border-width: 0 0 2px;
+    border-color: rgba(219, 219, 219, 0.3);
+}
+
+table tr td {
+    border: 1px solid #dbdbdb;
+    border-width: 0 0 1px;
+    border-color: rgba(219, 219, 219, 0.3);
+}
+
+.leftnav {
+    margin-right: 25px;
+}
+
+.leftnav-button {
+    background-color: #263238;
+    color: white;
+    font-family: Avenir,Helvetica,Arial,sans-serif;
+}
+
+.leftnav-button:hover {
+    background-color: rgb(38, 50, 56);
+}
+
+.leftnav-button a {
+    color: white;
+}
+
+/*
+    Select PROUT
+*/
+
+h2 {
+    margin: 30px 0 0 0;
+}
+
+fieldset {
+    border: 0;
+}
+
+label {
+    display: block;
+}
+
+/* select with custom icons */
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item-wrapper {
+    padding: 0.5em 0 0.5em 3em;
+}
+
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon {
+    height: 24px;
+    width: 24px;
+    top: 0.1em;
+}
+
+.ui-icon.video {
+    background: url("images/24-video-square.png") 0 0 no-repeat;
+}
+
+.ui-icon.podcast {
+    background: url("images/24-podcast-square.png") 0 0 no-repeat;
+}
+
+.ui-icon.rss {
+    background: url("images/24-rss-square.png") 0 0 no-repeat;
+}
+
+/* select with CSS avatar icons */
+option.avatar {
+    background-repeat: no-repeat !important;
+    padding-left: 20px;
+}
+
+.avatar .ui-icon {
+    background-position: left top;
+}
+
+h5 {
+    margin: 15px;
+}

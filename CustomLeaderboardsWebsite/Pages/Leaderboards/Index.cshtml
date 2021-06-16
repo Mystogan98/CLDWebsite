@@ -1,0 +1,76 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Solo leaderboards home";
+    Layout = "Shared/MainLayout.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Click on a category on the left to access its leaderboard.</p>
+</div>
+
+@section LeftNavigation {
+<ul class="nav flex-column">
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedPP">Weighted PP</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=rawPP">Raw PP</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageScorePercentage">Weighted average score %</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageScorePercentage">Average score %</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageRank">Weighted average rank</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageRank">Average rank</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=weightedAverageCountryRank">Weighted Average country rank</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=averageCountryRank">Average country rank</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=topPP">Top PP play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest96">Highest 96+% play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest97">Highest 97+% play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest98">Highest 98+% play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=highest99">Highest 99+% play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfRankedDiffPlayed">Number of ranked diff. played</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOf95">Number of ranked play with 95+%</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=bestRank">Best rank of any ranked play</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOf325">Number of ranked play worth 325+pp</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfCountryFirst">Number of #1st place in country</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfFirst">Number of #1st place</a>
+    </li>
+    <li class="leftnav-button">
+        <a class="nav-link" href="/Leaderboards/Leaderboard?cat=nbOfTop10">Number of top 10</a>
+    </li>
+</ul>
+}
